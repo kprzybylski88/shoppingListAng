@@ -1,6 +1,6 @@
-<app-header></app-header>
+<app-header (menuItemClicked) = "changeDisplayedComponent($event)"></app-header>
 <div class="container">
-  <app-recipes></app-recipes>
-  <app-shopping-list></app-shopping-list>
+  <app-recipes *ngIf="displayedComponent === 'recipes'"></app-recipes>
+  <app-shopping-list *ngIf="displayedComponent === 'shopping'" ></app-shopping-list>
 </div>
 <router-outlet></router-outlet>

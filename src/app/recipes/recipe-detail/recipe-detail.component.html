@@ -1,11 +1,13 @@
 <div class="row">
   <div class="col-xs-12">
-    <img src="" alt="" class="img-responsive">
+    <img [src]="recipe.imagePath"
+     alt="" class="img-responsive img-recipe-detail"
+     (click) = "imagePreview = true">
   </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
-      <h1>Recipe name</h1>
+      <h1>{{ recipe.name }}</h1>
     </div>
 </div>
 <div class="row">
@@ -22,7 +24,7 @@
 </div>
 <div class="row">
     <div class="col-xs-12">
-      Descripion
+      {{ recipe.description }}
     </div>
 </div>
 <div class="row">
@@ -30,3 +32,4 @@
       Ingredients
     </div>
 </div>
+<app-modal-image-preview *ngIf="imagePreview" [imagePath]="recipe.imagePath" (dismissed) = "imagePreview=false"></app-modal-image-preview>

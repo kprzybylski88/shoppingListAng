@@ -1,0 +1,7 @@
+.img-recipe-detail {
+  max-width: 100px;
+}
+
+.img-recipe-detail:hover {
+  cursor: pointer;
+}

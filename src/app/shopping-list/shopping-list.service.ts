@@ -22,5 +22,10 @@ export class ShoppingListService {
     this.onIngredientAdded.emit(this.ingredients.slice());
   }
 
+  addIngredients(newIngredients: Ingredient[]) {
+    this.ingredients = this.ingredients.concat(newIngredients);
+    this.onIngredientAdded.emit(this.ingredients.slice());
+  }
+
   constructor() { }
 }

@@ -12,9 +12,9 @@
 </div>
 <div class="row">
     <div class="col-xs-12">
-      <div class="btn-group">
+      <div class="btn-group" appDropdown>
         <button type="button" class="btn btn-primary dropdown-toggle">Manage recipe <span class="caret"></span></button>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu" >
           <li><a href="#">Add ingredients</a></li>
           <li><a href="#">Edit recipe</a></li>
           <li><a href="#">Delete recipe</a></li>
@@ -32,4 +32,4 @@
       Ingredients
     </div>
 </div>
-<app-modal-image-preview *ngIf="imagePreview" [imagePath]="recipe.imagePath" (dismissed) = "imagePreview=false"></app-modal-image-preview>
+<!-- <app-modal-image-preview *ngIf="imagePreview" [imagePath]="recipe.imagePath" (dismissed) = "imagePreview=false"></app-modal-image-preview> -->

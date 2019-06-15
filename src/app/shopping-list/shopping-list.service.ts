@@ -18,12 +18,28 @@ export class ShoppingListService {
   }
 
   addIngredient(ingredient: Ingredient) {
-    this.ingredients.push(ingredient);
+    let item = this.ingredients.find(ingr => ingr.name === ingredient.name);
+
+    if (item) {
+      let index = this.ingredients.indexOf(item);
+      this.ingredients[index].amount = this.ingredients[index].amount + ingredient.amount;
+       } else {
+         this.ingredients.push(ingredient);
+    }
     this.onIngredientAdded.emit(this.ingredients.slice());
   }
 
   addIngredients(newIngredients: Ingredient[]) {
-    this.ingredients = this.ingredients.concat(newIngredients);
+    for (const ingredientItem of newIngredients) {
+       let item = this.ingredients.find(ingr => ingr.name === ingredientItem.name);
+       if(item) {
+         let index = this.ingredients.indexOf(item);
+         this.ingredients[index].amount = this.ingredients[index].amount + ingredientItem.amount;
+       } else {
+         this.ingredients.push(ingredientItem);
+       }
+    }
+
     this.onIngredientAdded.emit(this.ingredients.slice());
   }
 

@@ -33,7 +33,7 @@ export class ShoppingListService {
   addIngredients(newIngredients: Ingredient[]) {
     for (const ingredientItem of newIngredients) {
        const item = this.ingredients.find(ingr => ingr.name === ingredientItem.name);
-       if(item) {
+       if (item) {
          const index = this.ingredients.indexOf(item);
          this.ingredients[index].amount = this.ingredients[index].amount + ingredientItem.amount;
        } else {

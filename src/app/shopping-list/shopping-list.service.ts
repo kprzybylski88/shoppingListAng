@@ -1,5 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,36 +12,36 @@ export class ShoppingListService {
     new Ingredient('tomatos', 10)
   ];
 
-  onIngredientAdded = new EventEmitter<Ingredient[]>();
+  onIngredientAdded = new Subject<Ingredient[]>();
 
   getIngredientList() {
     return this.ingredients.slice();
   }
 
   addIngredient(ingredient: Ingredient) {
-    let item = this.ingredients.find(ingr => ingr.name === ingredient.name);
+    const item = this.ingredients.find(ingr => ingr.name === ingredient.name);
 
     if (item) {
-      let index = this.ingredients.indexOf(item);
+      const index = this.ingredients.indexOf(item);
       this.ingredients[index].amount = this.ingredients[index].amount + ingredient.amount;
        } else {
          this.ingredients.push(ingredient);
     }
-    this.onIngredientAdded.emit(this.ingredients.slice());
+    this.onIngredientAdded.next(this.ingredients.slice());
   }
 
   addIngredients(newIngredients: Ingredient[]) {
     for (const ingredientItem of newIngredients) {
-       let item = this.ingredients.find(ingr => ingr.name === ingredientItem.name);
+       const item = this.ingredients.find(ingr => ingr.name === ingredientItem.name);
        if(item) {
-         let index = this.ingredients.indexOf(item);
+         const index = this.ingredients.indexOf(item);
          this.ingredients[index].amount = this.ingredients[index].amount + ingredientItem.amount;
        } else {
          this.ingredients.push(ingredientItem);
        }
     }
 
-    this.onIngredientAdded.emit(this.ingredients.slice());
+    this.onIngredientAdded.next(this.ingredients.slice());
   }
 
   constructor() { }

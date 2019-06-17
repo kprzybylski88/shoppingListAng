@@ -1,1 +1,4 @@
 .icon-bar{ background-color: #eee;}
+.nav.navbar-nav.navba-right:hover, .dropdown-menu a {
+  cursor: pointer;
+}

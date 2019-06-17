@@ -19,8 +19,11 @@ export class ShoppingEditComponent implements OnInit {
   addToList() {
     const name = this.nameInput.nativeElement.value;
     const amount = this.amountInput.nativeElement.value === '' ? 0 : parseInt(this.amountInput.nativeElement.value, 10);
-    const ingredient = new Ingredient(name, amount);
-    this.shoppingListService.addIngredient(ingredient);
+
+    if (name !== '' && amount !== 0) {
+      const ingredient = new Ingredient(name, amount);
+      this.shoppingListService.addIngredient(ingredient);
+    }
   }
 
 }

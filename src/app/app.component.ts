@@ -7,8 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   displayedComponent = 'recipes';
-  changeDisplayedComponent(componentName: string) {
-    this.displayedComponent = componentName;
-    // console.log(this.displayedComponent);
-  }
 }

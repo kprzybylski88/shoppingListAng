@@ -1,3 +1,13 @@
-<p>
-  recipe-edit works!
-</p>
+<div class="form-group">
+  <label for="name">Name: </label>
+  <input type="text" class="form-control" id="name" [value]="recipe.name">
+  <label for="description">Description: </label>
+  <textarea class="form-control rounded-0" id="description" [value]="recipe.description" rows="3"></textarea>
+  <label for="ingredients">Ingredients: </label>
+  <div id="ingredients">
+    <div class="ingredient"  *ngFor="let ingredient of recipe.ingredients; index as i">
+      <label [for]="'name' + i">Name: </label><input type="text" [id]="'name' + i" [value]="ingredient.name">
+      <label for="amount"> Amount: </label><input type="number" id="'amount' + i" [value]="ingredient.amount">
+    </div>
+  </div>
+</div>

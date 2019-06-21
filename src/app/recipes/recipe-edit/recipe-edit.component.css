@@ -1,3 +1,7 @@
 input.ng-invalid.ng-touched, textarea.ng-invalid.ng-touched {
   border: solid 1px red;
 }
+
+.image-responsive {
+  max-width: 300px;
+}

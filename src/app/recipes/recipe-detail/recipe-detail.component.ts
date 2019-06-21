@@ -15,7 +15,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   imagePreview = false;
   recipe: Recipe;
   routeSubscription: Subscription;
-
+  index: number;
   constructor(
     private shoppingListService: ShoppingListService,
     private recipeService: RecipeService,
@@ -26,16 +26,22 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     this.recipe = this.recipeService.getRecipeById(+this.route.snapshot.params.id);
     this.routeSubscription = this.route.params.subscribe({
       next: (params) => {
-        this.recipe = this.recipeService.getRecipeById(+params.id);
+        this.index = parseInt(params.id, 10);
+        this.recipe = this.recipeService.getRecipeById(this.index);
       }}
     );
     if (!this.recipe) {
-      this.router.navigate(['/recipes']);
+      this.router.navigate(['../'], {relativeTo: this.route});
     }
   }
 
   addIngredients() {
     this.shoppingListService.addEditIngredients(this.recipe.ingredients);
+  }
+
+  deleteRecipe() {
+    this.recipeService.deleteRecipe(this.index);
+    this.router.navigate(['../'], {relativeTo: this.route});
   }
 
   ngOnDestroy() {

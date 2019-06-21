@@ -1,13 +1,69 @@
-<div class="form-group">
-  <label for="name">Name: </label>
-  <input type="text" class="form-control" id="name" [value]="recipe.name">
-  <label for="description">Description: </label>
-  <textarea class="form-control rounded-0" id="description" [value]="recipe.description" rows="3"></textarea>
-  <label for="ingredients">Ingredients: </label>
-  <div id="ingredients">
-    <div class="ingredient"  *ngFor="let ingredient of recipe.ingredients; index as i">
-      <label [for]="'name' + i">Name: </label><input type="text" [id]="'name' + i" [value]="ingredient.name">
-      <label for="amount"> Amount: </label><input type="number" id="'amount' + i" [value]="ingredient.amount">
+<form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+  <div class="form-group" >
+    <label for="name">Name: </label>
+    <input
+      type="text"
+      class="form-control"
+      id="name"
+      formControlName="name">
+  </div>
+  <div class="form-group">
+    <label for="imageURL">Image Path: </label>
+    <input
+      type="text"
+      class="form-control"
+      id="imageURL"
+      formControlName="imageURL">
+  </div>
+  <div class="form-group">
+    <img src="" alt="" class="image-responsive">
+  </div>
+  <div class="form-group">
+    <label for="description">Description: </label>
+    <textarea
+      class="form-control rounded-0"
+      id="description"
+      rows="6"
+      formControlName="description"></textarea>
+  </div>
+  <div id="ingredients" class="row form-group" formArrayName="ingredients">
+    <label for="ingredients">Ingredients: </label>
+    <div
+      class="ingredient form-group"
+      *ngFor="let ingredientCtrl of getControls(); index as i"
+      [formGroupName]="i">
+
+      <div class="col-xs-8 name-group">
+        <label [for]="'name' + i">Name: </label>
+        <input
+          type="text"
+          class="form-control"
+          [id]="'name' + i"
+          formControlName="name">
+
+      </div>
+      <div class="col-xs-2 value-group">
+        <label [for]="'amount' + i"> Amount: </label>
+        <input
+          type="number"
+          class="form-control"
+          [id]="'amount' + i"
+          formControlName="amount">
+      </div>
+      <label for="btn">&nbsp;</label>
+      <div class="col-xs-2 delete-group" id="btn"><button class="btn btn-danger" (click)="deleteIngredient(i)">X</button></div>
     </div>
   </div>
-</div>
+  <div class="row">
+    <div class="col-xs-12 form-group">
+      <button class="btn btn-primary" type="button" (click)="addIngredient()">Add Ingredient</button>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-xs-12">
+      <button class="btn btn-success" type="submit" [disabled]="recipeForm.invalid">Save</button>
+      <button class="btn btn-danger" type="button" (click)="onCancel()">Cancel</button>
+    </div>
+  </div>
+</form>

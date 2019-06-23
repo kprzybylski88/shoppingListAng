@@ -10,7 +10,7 @@ export class RecipeService {
 
   recipesChanged = new Subject<Recipe[]>();
 
-  recipes: Recipe[] = [
+ /*  private _recipes: Recipe[] = [
     new Recipe(
       'Schnitzel',
       'This is a test',
@@ -27,32 +27,40 @@ export class RecipeService {
         new Ingredient('patty', 1)
       ],
       'https://storage.needpix.com/rsynced_images/recipe-575434_1280.png')
-  ];
+  ]; */
 
+  private _recipes: Recipe[] = [];
   constructor() { }
 
-  getRecipes() {
-    return this.recipes.slice();
+  get recipes() {
+    return this._recipes.slice();
+  }
+
+  set recipes(newRecipes: Recipe[]) {
+    this._recipes = newRecipes;
+    this.recipesChanged.next(this._recipes.slice());
   }
 
   getRecipeById(id: number) {
-    return this.recipes[id];
+    return this._recipes[id];
   }
 
   addRecipe(recipe: Recipe) {
-    this.recipes.push(recipe);
-    this.recipesChanged.next(this.recipes.slice());
+    this._recipes.push(recipe);
+    this.recipesChanged.next(this._recipes.slice());
   }
 
   updateRecipe(recipe: Recipe, index: number) {
-    this.recipes[index] = recipe;
-    this.recipesChanged.next(this.recipes.slice());
+    this._recipes[index] = recipe;
+    this.recipesChanged.next(this._recipes.slice());
   }
 
   deleteRecipe(index: number) {
-    this.recipes.splice(index, 1);
-    this.recipesChanged.next(this.recipes.slice());
+    this._recipes.splice(index, 1);
+    this.recipesChanged.next(this._recipes.slice());
 
   }
+
+
 
 }

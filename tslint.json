@@ -13,7 +13,8 @@
       true,
       "attribute",
       "app",
-      "camelCase"
+      "camelCase",
+      "allow-leading-underscore"
     ],
     "component-selector": [
       true,

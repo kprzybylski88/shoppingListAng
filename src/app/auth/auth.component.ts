@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService } from './auth.service';
+import { AuthService, AuthResponseData } from './auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -13,6 +14,7 @@ export class AuthComponent implements OnInit {
   loginMode = true;
   errorMessage = '';
   loading = false;
+  authObs: Observable<any>;
 
   constructor(private authService: AuthService) { }
 
@@ -27,22 +29,22 @@ export class AuthComponent implements OnInit {
     this.loading = true;
     console.log(authForm.value);
     if (this.loginMode) {
-      this.loading = false;
+      this.authObs = this.authService.login(authForm.value);
     } else {
-      this.authService.signup(authForm.value).subscribe({
-        next: signupData => console.log(signupData),
-        error: err => {
-          this.errorMessage = err;
-          this.loading = false;
-        },
-        complete: () => {
-          console.log('success!');
-          this.errorMessage = '';
-          this.loading = false;
-        }
-
-      });
+      this.authObs = this.authService.signup(authForm.value);
     }
+    this.authObs.subscribe({
+      next: loginData => console.log(loginData),
+      error: err => {
+        console.log(err),
+        this.errorMessage = err;
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+        console.log('success!');
+      }
+    });
   }
 
 }

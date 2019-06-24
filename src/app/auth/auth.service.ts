@@ -67,6 +67,7 @@ export class AuthService {
     }
     return throwError(errorMessage);
   }
+
   private handleAuthentication(authData: AuthResponseData) {
     const expirationDate = new Date(new Date().getTime() + parseInt(authData.expiresIn, 10) * 1000);
     const user = new User(authData.email, authData.localId, authData.idToken, expirationDate);

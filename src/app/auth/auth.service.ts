@@ -26,6 +26,8 @@ export class AuthService {
     loginURL: 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key='
   };
 
+  autoLogoutTimer: any;
+
   constructor(private http: HttpClient, private router: Router) { }
 
   signup(signupData: {email: string, password: string}): Observable<any> {
@@ -47,9 +49,21 @@ export class AuthService {
 
   }
 
-  logout() {
+  logout(/* calledFrom: string */) {
+    // console.log(calledFrom);
+
     this.user.next(null);
+    localStorage.removeItem('userData');
     this.router.navigate(['/auth']);
+    if (this.autoLogoutTimer) {
+      clearTimeout(this.autoLogoutTimer);
+    }
+  }
+
+  autologout(expirationDuration: number) {
+    console.log(expirationDuration);
+
+    this.autoLogoutTimer = setTimeout(this.logout.bind(this), expirationDuration);
   }
 
   private handleError(errorRes: HttpErrorResponse) {
@@ -78,6 +92,7 @@ export class AuthService {
     const expirationDate = new Date(new Date().getTime() + parseInt(authData.expiresIn, 10) * 1000);
     const user = new User(authData.email, authData.localId, authData.idToken, expirationDate);
     this.user.next(user);
+    this.autologout(+authData.expiresIn * 1000);
     localStorage.setItem('userData', JSON.stringify(user));
   }
 
@@ -88,12 +103,16 @@ export class AuthService {
       _token: string,
       _tokenExpirationDate: string
       } = JSON.parse(localStorage.getItem('userData'));
+    console.log(userData);
+
     if (!userData) {
       return;
     }
     const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
     if (loadedUser.token) {
+      const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
       this.user.next(loadedUser);
+      this.autologout(+expirationDuration);
     }
   }
 }

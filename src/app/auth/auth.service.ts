@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, Observable, BehaviorSubject } from 'rxjs';
 import { User } from './user.model';
+import { Router } from '@angular/router';
 
 export interface AuthResponseData {
   kind: string;
@@ -25,7 +26,7 @@ export class AuthService {
     loginURL: 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key='
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   signup(signupData: {email: string, password: string}): Observable<any> {
     return this.http.post<AuthResponseData>(this.URLs.signupURL + this.appKey,
@@ -44,6 +45,11 @@ export class AuthService {
         returnSecureToken: true
       }).pipe(catchError( err => this.handleError(err)), tap(resData => this.handleAuthentication(resData)));
 
+  }
+
+  logout() {
+    this.user.next(null);
+    this.router.navigate(['/auth']);
   }
 
   private handleError(errorRes: HttpErrorResponse) {
@@ -72,6 +78,22 @@ export class AuthService {
     const expirationDate = new Date(new Date().getTime() + parseInt(authData.expiresIn, 10) * 1000);
     const user = new User(authData.email, authData.localId, authData.idToken, expirationDate);
     this.user.next(user);
+    localStorage.setItem('userData', JSON.stringify(user));
+  }
 
+  autologin() {
+    const userData: {
+      email: string,
+      id: string,
+      _token: string,
+      _tokenExpirationDate: string
+      } = JSON.parse(localStorage.getItem('userData'));
+    if (!userData) {
+      return;
+    }
+    const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
+    if (loadedUser.token) {
+      this.user.next(loadedUser);
+    }
   }
 }

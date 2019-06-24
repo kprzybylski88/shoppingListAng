@@ -53,7 +53,7 @@ export class AuthService {
       case 'INVALID_PASSWORD': errorMessage = 'Invalid password. Please check your password and try again!'; break;
       case 'USER_DISABLED': errorMessage = 'The user account has been disabled by an administrator.'; break;
       case 'EMAIL_EXISTS': errorMessage = 'User with this email address already exists!'; break;
-      case 'WEAK_PASSWORD : Password should be at least 6 characters': {
+      case 'WEAK_PASSWORD : Password should be at least 6 characters!': {
         errorMessage = 'Password must be at least 6 characters!';
         break;
       }

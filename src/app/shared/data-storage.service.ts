@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { RecipeService } from '../recipes/recipe.service';
 import { Recipe } from '../recipes/recipe-list/recipe-model';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, take, exhaustMap } from 'rxjs/operators';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class DataStorageService {
     shoppingList: 'https://shopping-list-f962f.firebaseio.com/shopLis.json'
   };
 
-  constructor(private http: HttpClient, private recipeService: RecipeService) { }
+  constructor(private http: HttpClient, private recipeService: RecipeService, private authService: AuthService) { }
 
   storeRecipes() {
     const recipes = this.recipeService.recipes;
@@ -27,16 +28,23 @@ export class DataStorageService {
   }
 
   fetchRecipes() {
-    return this.http.get<Recipe[]>(this.dataURLs.recipes)
-      .pipe(
-        map( recipes => {
-          return recipes.map(recipe => {
-           return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []};
+    return this.authService.user.pipe(
+      take(1),
+      exhaustMap( user => {
+        // exhaust map. It is confusing, but also kinda awesome.
+        // You can merge two observables in one. You just need to return one of them inside the exhaust map
+        // and then proceed like you got that one. Here we change user observable into http one.
+        return this.http.get<Recipe[]>(this.dataURLs.recipes, {
+          params: new HttpParams().set('auth', user.token)
           });
-        }),
-        tap(recipes => this.recipeService.recipes = recipes
-      )
-    );
+      }),
+      map( recipes => {
+        return recipes.map(recipe => {
+          return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []};
+        });
+      }),
+    tap(recipes => this.recipeService.recipes = recipes
+  ));
   }
 
 }

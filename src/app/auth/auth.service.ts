@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
-import { throwError, Observable, Subject } from 'rxjs';
+import { throwError, Observable, BehaviorSubject } from 'rxjs';
 import { User } from './user.model';
 
 export interface AuthResponseData {
@@ -18,7 +18,7 @@ export interface AuthResponseData {
   providedIn: 'root'
 })
 export class AuthService {
-  user = new Subject<User>();
+  user = new BehaviorSubject<User>(null);
   private readonly appKey = 'AIzaSyAmyn4rYBMmDqyQg_uCPZgNod13ZkBvD9k';
   private readonly URLs = {
     signupURL: 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=',

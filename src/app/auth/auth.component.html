@@ -27,7 +27,7 @@
         <button
           type="submit"
           class="btn btn-primary"
-          [disabled]="authForm.invalid">{{ loginMode ? 'Login' : 'Sign Up' }}</button> |
+          [disabled]="authForm.invalid || loading"><div class="lds-dual-ring" *ngIf="loading" role="status" aria-hidden="true"></div>&nbsp;{{ loginMode ? 'Login' : 'Sign Up' }}</button> |
         <button type="button"
           (click)="switchMode()"
           class="btn btn-primary">Switch to{{ loginMode ? ' Sign Up' : ' Login' }}</button>

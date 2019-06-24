@@ -12,6 +12,7 @@ export class AuthComponent implements OnInit {
 
   loginMode = true;
   errorMessage = '';
+  loading = false;
 
   constructor(private authService: AuthService) { }
 
@@ -23,20 +24,21 @@ export class AuthComponent implements OnInit {
   }
 
   onSubmit(authForm: NgForm) {
+    this.loading = true;
     console.log(authForm.value);
     if (this.loginMode) {
-
+      this.loading = false;
     } else {
       this.authService.signup(authForm.value).subscribe({
         next: signupData => console.log(signupData),
         error: err => {
-          this.errorMessage = err.error.message;
-          console.log(err);
-
+          this.errorMessage = err;
+          this.loading = false;
         },
         complete: () => {
           console.log('success!');
           this.errorMessage = '';
+          this.loading = false;
         }
 
       });

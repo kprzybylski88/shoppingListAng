@@ -1,13 +1,5 @@
-ag
-<div class="modal fade in" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-body">
-          <img [src]="imagePath" alt="preview" class="img-responsive rounded mx-auto d-block">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="dismiss()">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="overlay" (click)="dismiss()"></div>
+<div class="modal-box">
+  <button type="button" class="btn btn-danger btn-close" (click)="dismiss()">X</button>
+  <img [src]="imagePath" alt="preview" class="img-responsive rounded mx-auto d-block">
+</div>

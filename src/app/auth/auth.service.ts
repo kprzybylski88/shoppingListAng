@@ -26,6 +26,8 @@ export class AuthService {
     loginURL: 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key='
   };
 
+  logoutTimeout: any;
+
   constructor(private http: HttpClient, private router: Router) { }
 
   signup(signupData: {email: string, password: string}): Observable<any> {
@@ -49,7 +51,16 @@ export class AuthService {
 
   logout() {
     this.user.next(null);
+    localStorage.removeItem('userData');
     this.router.navigate(['/auth']);
+    if (this.logoutTimeout) {
+      clearTimeout(this.logoutTimeout);
+    }
+  }
+
+  autologout(expirationTime: number) {
+    console.log(expirationTime);
+    this.logoutTimeout = setTimeout( () => { this.logout(); }, expirationTime);
   }
 
   private handleError(errorRes: HttpErrorResponse) {
@@ -79,6 +90,7 @@ export class AuthService {
     const user = new User(authData.email, authData.localId, authData.idToken, expirationDate);
     this.user.next(user);
     localStorage.setItem('userData', JSON.stringify(user));
+    this.autologout(expirationDate.getTime() - new Date().getTime());
   }
 
   autologin() {
@@ -94,6 +106,8 @@ export class AuthService {
     const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
     if (loadedUser.token) {
       this.user.next(loadedUser);
+      const expTime = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+      this.autologout(expTime);
     }
   }
 }

@@ -9,10 +9,11 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ModalImagePreviewComponent } from '../modal-image-preview/modal-image-preview.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RecipesRoutingModule } from './recipes-routing.module';
 
 @NgModule({
   imports: [
-    RouterModule,
+    RecipesRoutingModule,
     CommonModule,
     ReactiveFormsModule
   ],
@@ -25,14 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     RecipeEditComponent,
     ModalImagePreviewComponent,
   ],
-  exports: [
-    RecipesComponent,
-    RecipeListComponent,
-    RecipeDetailComponent,
-    RecipeItemComponent,
-    NoRecipeComponent,
-    RecipeEditComponent
-  ]
+  exports: [ ]
 })
 export class RecipesModule {
 

@@ -13,15 +13,14 @@ import { FormsModule } from '@angular/forms';
 import { AlertComponent } from './shared/alert/alert.component';
 import { RecipesModule } from './recipes/recipes.module';
 import { ShoppingListModule } from './shopping-list/shopping-list.module';
+import { SharedModule } from './shared/shared.module';
 
 
 @NgModule({
    declarations: [
-      AlertComponent,
       AuthComponent,
       AppComponent,
-      HeaderComponent,
-      DropdownDirective
+      HeaderComponent
 
    ],
    imports: [
@@ -30,7 +29,8 @@ import { ShoppingListModule } from './shopping-list/shopping-list.module';
       HttpClientModule,
       FormsModule,
       RecipesModule,
-      ShoppingListModule
+      ShoppingListModule,
+      SharedModule
    ],
    bootstrap: [
       AppComponent

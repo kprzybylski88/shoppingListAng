@@ -3,8 +3,7 @@ import { NgForm } from '@angular/forms';
 import { AuthService, AuthResponseData } from './auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { AlertComponent } from '../shared/alert/alert.component';
-import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
+
 
 @Component({
   selector: 'app-auth',
@@ -18,7 +17,6 @@ export class AuthComponent implements OnInit, OnDestroy {
   errorMessage = '';
   loading = false;
   authObs: Observable<any>;
-  @ViewChild(PlaceholderDirective, { static: true }) alertHost: PlaceholderDirective;
 
   constructor(private authService: AuthService, private router: Router, private cmpFtryRes: ComponentFactoryResolver) { }
 
@@ -43,7 +41,6 @@ export class AuthComponent implements OnInit, OnDestroy {
         console.log(err),
         this.errorMessage = err;
         this.loading = false;
-        this.showErrorAlert(err);
       },
       complete: () => {
         this.loading = false;
@@ -53,7 +50,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     });
   }
 
-  private showErrorAlert(message: string) {
+/*   private showErrorAlert(message: string) {
     const alertCmpFactory = this.cmpFtryRes.resolveComponentFactory(AlertComponent);
     const viewContainerRef = this.alertHost.viewContainerRef;
     viewContainerRef.clear();
@@ -63,7 +60,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       componentRef.destroy();
       this.closeSub.unsubscribe();
     });
-  }
+  } */
 
   ngOnDestroy() {
     if (this.closeSub) {

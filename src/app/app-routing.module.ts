@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-<<<<<<< HEAD
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { RecipesComponent } from './recipes/recipes.component';
 import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
@@ -21,12 +20,6 @@ const routes: Routes = [
   ]},
   {path: 'auth', component: AuthComponent},
   {path: '**', redirectTo: '/recipes'}
-=======
-
-const routes: Routes = [
-  { path: '**', redirectTo: '/recipes' },
-  { path: 'recipes', loadChildren: './recipes/recipes.module#RecipesModule' }
->>>>>>> 36b3ab5ca02ac16f027672d3818a023069bf60c8
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -26,11 +26,8 @@ export class AuthService {
     loginURL: 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key='
   };
 
-<<<<<<< HEAD
   logoutTimeout: any;
-=======
-  autoLogoutTimer: any;
->>>>>>> 36b3ab5ca02ac16f027672d3818a023069bf60c8
+
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -59,7 +56,7 @@ export class AuthService {
     this.user.next(null);
     localStorage.removeItem('userData');
     this.router.navigate(['/auth']);
-<<<<<<< HEAD
+
     if (this.logoutTimeout) {
       clearTimeout(this.logoutTimeout);
     }
@@ -68,17 +65,6 @@ export class AuthService {
   autologout(expirationTime: number) {
     console.log(expirationTime);
     this.logoutTimeout = setTimeout( () => { this.logout(); }, expirationTime);
-=======
-    if (this.autoLogoutTimer) {
-      clearTimeout(this.autoLogoutTimer);
-    }
-  }
-
-  autologout(expirationDuration: number) {
-    console.log(expirationDuration);
-
-    this.autoLogoutTimer = setTimeout(this.logout.bind(this), expirationDuration);
->>>>>>> 36b3ab5ca02ac16f027672d3818a023069bf60c8
   }
 
   private handleError(errorRes: HttpErrorResponse) {
@@ -128,12 +114,10 @@ export class AuthService {
     if (loadedUser.token) {
       const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
       this.user.next(loadedUser);
-<<<<<<< HEAD
+
       const expTime = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
       this.autologout(expTime);
-=======
-      this.autologout(+expirationDuration);
->>>>>>> 36b3ab5ca02ac16f027672d3818a023069bf60c8
+
     }
   }
 }

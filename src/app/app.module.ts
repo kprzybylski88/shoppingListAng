@@ -19,10 +19,12 @@ import { NoRecipeComponent } from './recipes/no-recipe/no-recipe.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AlertComponent } from './shared/alert/alert.component';
 
 
 @NgModule({
    declarations: [
+      AlertComponent,
       AuthComponent,
       AppComponent,
       HeaderComponent,

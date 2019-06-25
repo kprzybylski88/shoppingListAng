@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, ViewChild, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService, AuthResponseData } from './auth.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { AlertComponent } from '../shared/alert/alert.component';
+import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
 
 @Component({
   selector: 'app-auth',
@@ -10,14 +12,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./auth.component.css']
 })
 
-export class AuthComponent implements OnInit {
-
+export class AuthComponent implements OnInit, OnDestroy {
+  private closeSub: Subscription;
   loginMode = true;
   errorMessage = '';
   loading = false;
   authObs: Observable<any>;
+  @ViewChild(PlaceholderDirective, { static: true }) alertHost: PlaceholderDirective;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private cmpFtryRes: ComponentFactoryResolver) { }
 
   ngOnInit() {
   }
@@ -40,6 +43,7 @@ export class AuthComponent implements OnInit {
         console.log(err),
         this.errorMessage = err;
         this.loading = false;
+        this.showErrorAlert(err);
       },
       complete: () => {
         this.loading = false;
@@ -47,6 +51,24 @@ export class AuthComponent implements OnInit {
         this.router.navigate(['/recipes']);
       }
     });
+  }
+
+  private showErrorAlert(message: string) {
+    const alertCmpFactory = this.cmpFtryRes.resolveComponentFactory(AlertComponent);
+    const viewContainerRef = this.alertHost.viewContainerRef;
+    viewContainerRef.clear();
+    const componentRef = viewContainerRef.createComponent(alertCmpFactory);
+    componentRef.instance.message = message;
+    this.closeSub = componentRef.instance.dismiss.subscribe(() => {
+      componentRef.destroy();
+      this.closeSub.unsubscribe();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.closeSub) {
+      this.closeSub.unsubscribe();
+    }
   }
 
 }

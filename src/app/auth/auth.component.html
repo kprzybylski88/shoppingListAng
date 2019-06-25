@@ -33,7 +33,9 @@
           class="btn btn-primary">Switch to{{ loginMode ? ' Sign Up' : ' Login' }}</button>
       </div>
     </form>
-    <hr *ngIf="errorMessage !== ''">
-    <div class="alert alert-danger" *ngIf="errorMessage != ''">{{ errorMessage }}</div>
+    <!-- <hr *ngIf="errorMessage !== ''">
+    <div class="alert alert-danger" *ngIf="errorMessage != ''">{{ errorMessage }}</div> -->
   </div>
 </div>
+<ng-template appPlaceholder></ng-template>
+<!-- <app-alert [message]="errorMessage" *ngIf="errorMessage!=''"(dismiss)="errorMessage=''"></app-alert> -->

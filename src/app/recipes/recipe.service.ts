@@ -42,7 +42,7 @@ export class RecipeService {
   }
 
   getRecipeById(id: number) {
-    return this._recipes[id];
+    return this.recipes[id] ? this._recipes[id] : null;
   }
 
   addRecipe(recipe: Recipe) {

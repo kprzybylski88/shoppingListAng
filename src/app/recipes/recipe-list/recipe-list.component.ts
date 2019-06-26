@@ -23,11 +23,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     });
   }
 
-  onClick(index: number) {
-    console.log(index);
-
-  }
-
   ngOnDestroy() {
     this.recipeSubscription.unsubscribe();
   }

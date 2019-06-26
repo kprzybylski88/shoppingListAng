@@ -105,7 +105,6 @@ export class AuthService {
       _token: string,
       _tokenExpirationDate: string
       } = JSON.parse(localStorage.getItem('userData'));
-    console.log(userData);
 
     if (!userData) {
       return;

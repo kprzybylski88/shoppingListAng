@@ -4,6 +4,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { throwError, Observable, BehaviorSubject } from 'rxjs';
 import { User } from './user.model';
 import { Router } from '@angular/router';
+import { RecipeService } from '../recipes/recipe.service';
 
 export interface AuthResponseData {
   kind: string;
@@ -29,7 +30,7 @@ export class AuthService {
   logoutTimeout: any;
 
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private recipeService: RecipeService) { }
 
   signup(signupData: {email: string, password: string}): Observable<any> {
     return this.http.post<AuthResponseData>(this.URLs.signupURL + this.appKey,
@@ -52,7 +53,7 @@ export class AuthService {
 
   logout(/* calledFrom: string */) {
     // console.log(calledFrom);
-
+    this.recipeService.recipes = [];
     this.user.next(null);
     localStorage.removeItem('userData');
     this.router.navigate(['/auth']);
@@ -63,7 +64,6 @@ export class AuthService {
   }
 
   autologout(expirationTime: number) {
-    console.log(expirationTime);
     this.logoutTimeout = setTimeout( () => { this.logout(); }, expirationTime);
   }
 

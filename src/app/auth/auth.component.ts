@@ -29,14 +29,12 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   onSubmit(authForm: NgForm) {
     this.loading = true;
-    console.log(authForm.value);
     if (this.loginMode) {
       this.authObs = this.authService.login(authForm.value);
     } else {
       this.authObs = this.authService.signup(authForm.value);
     }
     this.authObs.subscribe({
-      next: loginData => console.log(loginData),
       error: err => {
         console.log(err),
         this.errorMessage = err;

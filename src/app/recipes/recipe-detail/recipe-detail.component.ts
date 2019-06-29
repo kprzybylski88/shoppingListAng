@@ -4,7 +4,7 @@ import { ShoppingListService } from 'src/app/shopping-list/shopping-list.service
 import { ActivatedRoute, Router } from '@angular/router';
 import { RecipeService } from '../recipe.service';
 import { Subscription } from 'rxjs';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 
 @Component({
   selector: 'app-recipe-detail',

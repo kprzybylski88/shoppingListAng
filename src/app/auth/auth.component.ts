@@ -43,7 +43,9 @@ export class AuthComponent implements OnInit, OnDestroy {
       complete: () => {
         this.loading = false;
         console.log('success!');
-        this.router.navigate(['/recipes']);
+        if (this.loginMode) {
+          this.router.navigate(['/recipes']);
+        }
       }
     });
   }

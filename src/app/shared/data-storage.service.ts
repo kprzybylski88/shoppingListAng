@@ -4,6 +4,8 @@ import { RecipeService } from '../recipes/recipe.service';
 import { Recipe } from '../recipes/recipe-list/recipe-model';
 import { map, tap, take, exhaustMap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { Account } from '../account/account/account.model';
+import { Observable, Subscriber } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,10 @@ export class DataStorageService {
 
   private readonly dataURL = 'https://shopping-list-f962f.firebaseio.com/';
 
-  constructor(private http: HttpClient, private recipeService: RecipeService, private authService: AuthService) {   }
+  constructor(
+    private http: HttpClient,
+    private recipeService: RecipeService,
+    private authService: AuthService) {   }
 
   storeRecipes() {
     console.log('bop');
@@ -42,6 +47,21 @@ export class DataStorageService {
     );
     } ));
 
+  }
+
+  getAccount() {
+    return this.authService.user.pipe(exhaustMap ( userData => {
+      if (!userData) {
+        return new Observable<Account>(null);
+      }
+      return this.http.get<Account>(this.dataURL + userData.id + '/account.json');
+    }));
+  }
+
+  setAccount(id: string, email: string) {
+    const account = new Account (id, email);
+    console.log(account);
+    this.http.put(this.dataURL + account.id + '/account.json', account).pipe(take(1)).subscribe();
   }
 
 }

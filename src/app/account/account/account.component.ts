@@ -1,24 +1,86 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import {MDCFloatingLabel} from '@material/floating-label';
-import {MDCTextField} from '@material/textfield';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
+import { Account } from './account.model';
+import { DataStorageService } from 'src/app/shared/data-storage.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss']
 })
-export class AccountComponent implements OnInit {
-
+export class AccountComponent implements OnInit, OnDestroy {
+  account: Account;
   userForm: FormGroup;
-  constructor() { }
+  imageSrc: string;
+  constructor(private dataStorageService: DataStorageService, private authService: AuthService) { }
 
   ngOnInit() {
-    const floatingLabel = new MDCFloatingLabel(document.querySelector('.mdc-floating-label'));
-    const textField = new MDCTextField(document.querySelector('.mdc-text-field'));
+    this.initAccount();
+    this.authService.setAccount.subscribe({
+      next: data => {
+        if (data) {
+          this.dataStorageService.setAccount(data.id, data.email);
+          this.account = new Account (data.id, data.email);
+          this.patchAccount();
+        }
+      }
+    }
+    );
+    this.dataStorageService.getAccount().subscribe({
+      next: accountData => {
+        if (accountData) {
+          this.account = accountData;
+          this.patchAccount();
+          console.log(accountData);
+        }
+      }
+    });
+
+  }
+
+  patchAccount() {
+    this.userForm.value.username = this.account.displayedName;
+    this.userForm.value.email = this.account.email;
+  }
+
+  initAccount(accountData?: Account) {
+    this.userForm = new FormGroup(
+      {
+        username: new FormControl(),
+        email: new FormControl(),
+        password: new FormControl(),
+        rePassword: new FormControl(),
+        profilePicture: new FormControl()
+      });
+    // this.imageSrc = accountData.profilePicture === '' ? null : accountData.profilePicture;
+  }
+
+  fileUploadClick(event: Event) {
+    const uploadInput = (event.target as HTMLElement).querySelector('input');
+    if (uploadInput) {
+      uploadInput.click();
+    }
+  }
+
+  processFile(event: Event) {
+ /*    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = e => this.imageSrc = reader.result;
+      reader.readAsDataURL(file);
+    } */
   }
 
   updateUser() {
+/*     const username = this.userForm.value.username;
+    const email = this.userForm.value.email;
+    const profilePicture = '';
+    this.dataStorageService.setAccount(username, email, profilePicture); */
+  }
+
+  ngOnDestroy() {
 
   }
 

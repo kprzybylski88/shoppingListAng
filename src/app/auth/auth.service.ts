@@ -21,16 +21,21 @@ export interface AuthResponseData {
 })
 export class AuthService {
   user = new BehaviorSubject<User>(null);
+  setAccount = new BehaviorSubject<{id: string, email: string}>(null);
   private readonly appKey = 'AIzaSyAmyn4rYBMmDqyQg_uCPZgNod13ZkBvD9k';
   private readonly URLs = {
     signupURL: 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=',
     loginURL: 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key='
   };
 
+
   logoutTimeout: any;
 
 
-  constructor(private http: HttpClient, private router: Router, private recipeService: RecipeService) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private recipeService: RecipeService) { }
 
   signup(signupData: {email: string, password: string}): Observable<any> {
     return this.http.post<AuthResponseData>(this.URLs.signupURL + this.appKey,
@@ -38,7 +43,11 @@ export class AuthService {
       email: signupData.email,
       password: signupData.password,
       returnSecureToken: true
-    }).pipe(catchError( err => this.handleError(err)), tap(resData => this.handleAuthentication(resData)));
+    }).pipe(catchError( err => this.handleError(err)), tap(resData => {
+      this.handleAuthentication(resData);
+      this.setAccount.next({id: resData.localId, email: resData.email});
+      this.router.navigate(['/account']);
+    }));
   }
 
   login(loginData: {email: string, password: string}) {
@@ -48,7 +57,6 @@ export class AuthService {
         password: loginData.password,
         returnSecureToken: true
       }).pipe(catchError( err => this.handleError(err)), tap(resData => this.handleAuthentication(resData)));
-
   }
 
   logout(/* calledFrom: string */) {

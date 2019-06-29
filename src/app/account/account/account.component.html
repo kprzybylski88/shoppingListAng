@@ -1,7 +1,24 @@
-<form [formGroup]="userForm" (ngOnSubmit)="updateUser()">
-  <div class="form-group mdc-text-field">
-      <label class="mdc-floating-label" for="username">Hint text</label>
-      <input type="text" id="username">
-  </div>
+<form class="example-form" (ngSubmit) = "updateUser()" [formGroup]="userForm">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Username" formControlName="username" [value]="account && account.displayedName ? account.displayedName : ''">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <input type="email" matInput placeholder="Email" formControlName="email" [value]="account && account.email ? account.email : ''">
+      </mat-form-field>
 
-</form>
+    <mat-form-field class="example-full-width">
+      <input type="password" matInput placeholder="Password" formControlName="password">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <input type="password" matInput placeholder="Retype password" formControlName="rePassword">
+      </mat-form-field>
+      <div class="file-upload">
+        <button type="button" mat-raised-button (click) = "fileUploadClick($event)">Upload
+          <input formControlName="profilePicture" type="file" nbButton multiple accept="image/*"
+            (change)="processFile($event)" style="display: none" />
+        </button>
+        <mat-card class="image-preview"><img [src]="imageSrc" *ngIf="imageSrc"><span *ngIf="!imageSrc">Profile picture</span></mat-card>
+      </div>
+      <mat-divider class="mat-divider"></mat-divider>
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+  </form>

@@ -9,7 +9,7 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
 import { AccountModule } from './account/account.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
    declarations: [
@@ -24,8 +24,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       CoreModule,
       AccountModule,
       AppRoutingModule,
-      BrowserAnimationsModule
-
+      BrowserAnimationsModule,
+      MatInputModule
    ],
    bootstrap: [
       AppComponent

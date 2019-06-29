@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
+import { AccountModule } from './account/account.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import { CoreModule } from './core.module';
       HttpClientModule,
       SharedModule,
       CoreModule,
-      AppRoutingModule
+      AccountModule,
+      AppRoutingModule,
+      BrowserAnimationsModule
 
    ],
    bootstrap: [

@@ -20,5 +20,5 @@
         <mat-card class="image-preview"><img [src]="imageSrc" *ngIf="imageSrc"><span *ngIf="!imageSrc">Profile picture</span></mat-card>
       </div>
       <mat-divider class="mat-divider"></mat-divider>
-      <button mat-raised-button color="primary" type="submit">Submit</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid">Submit</button>
   </form>

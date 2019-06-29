@@ -5,7 +5,8 @@ import { Recipe } from '../recipes/recipe-list/recipe-model';
 import { map, tap, take, exhaustMap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { Account } from '../account/account/account.model';
-import { Observable, Subscriber } from 'rxjs';
+import { Observable } from 'rxjs';
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -60,8 +61,49 @@ export class DataStorageService {
 
   setAccount(id: string, email: string) {
     const account = new Account (id, email);
-    console.log(account);
     this.http.put(this.dataURL + account.id + '/account.json', account).pipe(take(1)).subscribe();
   }
 
+  updateAccount(account: Account) {
+    console.log(account);
+
+    this.http.put(this.dataURL + account.id + '/account.json', account).pipe(take(1)).subscribe({
+      next: data => console.log(data)
+    });
+  }
+
+  postProfilePicture(image: File) {
+    const storageRef = this.initStorage().ref();
+    const ext = image.name.split('.')[image.name.split.length - 1];
+    this.authService.user.pipe(take(1)).subscribe({
+      next: data => {
+        const fileRef = storageRef.child(data.id + '/pfp');
+        fileRef.put(image).then(response => {
+          console.log(response);
+        });
+      }
+    });
+  }
+
+  getProfilePicture() {
+  return this.authService.user.pipe(take(1), exhaustMap(
+    data => {
+       const storageRef = this.initStorage().ref('d9PgSz6Fj8NKo3OntXE6KdwewaH3/');
+       return storageRef.child('pfp').getDownloadURL();
+    }
+  ));
+  }
+
+  initStorage() {
+    if (firebase.apps.length === 0) {
+      const firebaseRef = firebase.initializeApp({
+        apiKey: 'AIzaSyAmyn4rYBMmDqyQg_uCPZgNod13ZkBvD9k',
+        authDomain: 'shopping-list-f962f.firebaseapp.com',
+        databaseURL: 'https://shopping-list-f962f.firebaseio.com',
+        storageBucket: 'gs://shopping-list-f962f.appspot.com/'
+      });
+  }
+    const storage = firebase.apps[0].storage();
+    return storage;
+  }
 }

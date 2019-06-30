@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Account } from './account.model';
 import { DataStorageService } from 'src/app/shared/data-storage.service';
 import { AuthService } from 'src/app/auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-account',
@@ -14,15 +15,18 @@ export class AccountComponent implements OnInit, OnDestroy {
   userForm: FormGroup;
   imageSrc: string;
   passwd: string;
+  accSub: Subscription;
+  pfpSub: Subscription;
+  iniSub: Subscription;
   constructor(private dataStorageService: DataStorageService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.dataStorageService.getProfilePicture().subscribe({
+    this.pfpSub = this.dataStorageService.getProfilePicture().subscribe({
       next: url => this.imageSrc = url,
       error: err => console.log(err)
     });
     this.initAccount();
-    this.authService.setAccount.subscribe({
+    this.iniSub = this.authService.setAccount.subscribe({
       next: data => {
         if (data) {
           this.dataStorageService.setAccount(data.id, data.email);
@@ -32,7 +36,7 @@ export class AccountComponent implements OnInit, OnDestroy {
       }
     }
     );
-    this.dataStorageService.getAccount().subscribe({
+    this.accSub = this.dataStorageService.getAccount().subscribe({
       next: accountData => {
         if (accountData) {
           this.account = accountData;
@@ -47,7 +51,6 @@ export class AccountComponent implements OnInit, OnDestroy {
   patchAccount() {
     this.userForm.controls.username.setValue(this.account.displayedName);
     this.userForm.controls.email.setValue(this.account.email);
-    this.userForm.get('email').markAsDirty();
   }
 
   initAccount(accountData?: Account) {
@@ -113,7 +116,9 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
+    this.accSub.unsubscribe();
+    this.iniSub.unsubscribe();
+    this.pfpSub.unsubscribe();
   }
 
 }

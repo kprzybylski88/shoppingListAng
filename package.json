@@ -24,6 +24,7 @@
     "@material/floating-label": "^3.0.0",
     "@material/line-ripple": "^3.0.0",
     "@material/textfield": "^3.0.0",
+    "@ngrx/store": "^8.0.1",
     "bootstrap": "^3.4.1",
     "firebase": "^6.2.4",
     "hammerjs": "^2.0.8",

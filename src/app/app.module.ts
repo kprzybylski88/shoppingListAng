@@ -10,6 +10,8 @@ import { CoreModule } from './core.module';
 import { AccountModule } from './account/account.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
 
 @NgModule({
    declarations: [
@@ -25,7 +27,8 @@ import {MatInputModule} from '@angular/material/input';
       AccountModule,
       AppRoutingModule,
       BrowserAnimationsModule,
-      MatInputModule
+      MatInputModule,
+      StoreModule.forRoot(reducers, { metaReducers })
    ],
    bootstrap: [
       AppComponent

@@ -9,9 +9,9 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
 import { AccountModule } from './account/account.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
+import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer';
 
 @NgModule({
    declarations: [
@@ -28,7 +28,7 @@ import { reducers, metaReducers } from './reducers';
       AppRoutingModule,
       BrowserAnimationsModule,
       MatInputModule,
-      StoreModule.forRoot(reducers, { metaReducers })
+      StoreModule.forRoot({shoppingList: shoppingListReducer})
    ],
    bootstrap: [
       AppComponent
